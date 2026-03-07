@@ -10,6 +10,12 @@ fn factorial(num: u64) -> u64 {
     // - additional variables
     // For an extra challenge, don't use:
     // - recursion
+    if num == 0 || num == 1 {
+        return 1;
+    }
+    let arr = 1..=num; // = means include the last 1..4 means 1,2,3... 1..=4 means 1,2,3,4
+
+    arr.fold(1, |acc, current| acc * current)
 }
 
 fn main() {
