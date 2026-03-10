@@ -27,19 +27,23 @@ mod tests {
     fn reference_mutation() {
         // Clone occurs because `input` needs to be mutated.
         let vec = vec![-1, 0, 1];
-        let mut input = Cow::from(&vec);
+        let mut input = Cow::from(&vec); // its borrowed here, coz we are referencing vec
         abs_all(&mut input);
-        assert!(matches!(input, Cow::Owned(_)));
+        assert!(matches!(input, Cow::Owned(_))); // it will be changed to owned, coz we are
+                                                 // mutating the vec if something is below than 0
+                                                 // in the vec(which is true for the above input)
     }
 
     #[test]
     fn reference_no_mutation() {
         // No clone occurs because `input` doesn't need to be mutated.
         let vec = vec![0, 1, 2];
-        let mut input = Cow::from(&vec);
+        let mut input = Cow::from(&vec); // its borrowed here, coz we are referencing vec
         abs_all(&mut input);
         // TODO: Replace `todo!()` with `Cow::Owned(_)` or `Cow::Borrowed(_)`.
-        assert!(matches!(input, todo!()));
+        assert!(matches!(input, Cow::Borrowed(_))); // it will be remained as borrowed, coz we are
+                                                 // mutating the vec if something is below than 0
+                                                 // in the vec(which is not true for the above input)
     }
 
     #[test]
@@ -49,10 +53,10 @@ mod tests {
         // also no clone. But the result is still owned because it was never
         // borrowed or mutated.
         let vec = vec![0, 1, 2];
-        let mut input = Cow::from(vec);
+        let mut input = Cow::from(vec); // its owned, coz we are transfering the vec ownership
         abs_all(&mut input);
         // TODO: Replace `todo!()` with `Cow::Owned(_)` or `Cow::Borrowed(_)`.
-        assert!(matches!(input, todo!()));
+        assert!(matches!(input, Cow::Owned(_))); // it will be remained as owned
     }
 
     #[test]
@@ -61,9 +65,9 @@ mod tests {
         // numbers are absolute). In this case, the call to `to_mut()` in the
         // `abs_all` function returns a reference to the same data as before.
         let vec = vec![-1, 0, 1];
-        let mut input = Cow::from(vec);
+        let mut input = Cow::from(vec); // its owned, coz we are transfering the vec ownership
         abs_all(&mut input);
         // TODO: Replace `todo!()` with `Cow::Owned(_)` or `Cow::Borrowed(_)`.
-        assert!(matches!(input, todo!()));
+        assert!(matches!(input, Cow::Owned(_)));
     }
 }
